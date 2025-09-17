@@ -176,27 +176,25 @@ const trimTopLanguages = (topLangs, langs_count, hide) => {
   let langsToHide = {};
   let langsCount = clampValue(langs_count, 1, MAXIMUM_LANGS_COUNT);
 
-  // populate langsToHide map for quick lookup
-  // while filtering out
+  // populate langsToHide map for quick lookup while filtering out
   if (hide) {
     hide.forEach((langName) => {
       langsToHide[lowercaseTrim(langName)] = true;
     });
   }
 
-  // filter out languages to be hidden
+  // filter out languages to be hidden and sort by size
   langs = langs
     .sort((a, b) => b.size - a.size)
     .filter((lang) => {
       return !langsToHide[lowercaseTrim(lang.name)];
     })
-    .slice(0, 6);
+    .slice(0, langsCount); // <- aqui limitamos ao langs_count passado (ex: 6)
 
   const totalLanguageSize = langs.reduce((acc, curr) => acc + curr.size, 0);
 
   return { langs, totalLanguageSize };
 };
-
 /**
  * Get display value corresponding to the format.
  *
